@@ -1,2 +1,2 @@
 /*    /index.html   200
-/api/*  https://us-central1-social-api-3bbea.cloudfunctions.net/api  200
+/api/*  https://us-central1-social-api-3bbea.cloudfunctions.net/api:splat  200
