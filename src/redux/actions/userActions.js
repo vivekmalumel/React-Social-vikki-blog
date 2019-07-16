@@ -4,7 +4,7 @@ import axios from 'axios';
 export const loginUser=(userData,history)=>(dispatch)=>{
     //console.log('action caught');
     dispatch({type:LOADING_UI});
-    axios.post('/login',userData)
+    axios.post('/api/login',userData)
         .then(response=>{
             
             localStorage.setItem('fbIdToken',`Bearer ${response.data.token}`);
