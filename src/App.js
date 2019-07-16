@@ -1,49 +1,51 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
+import {Route,Switch} from 'react-router-dom'
 import home from './pages/home';
 import login from './pages/login';
 import dashboard from './pages/dashboard';
 import notFound from './pages/notFound';
 import Navbar from './components/Navbar';
 import jwtDecode from 'jwt-decode'
-import AuthRoute from './utils/AuthRoute';
-import {Provider} from 'react-redux';
-import store from './redux/store'
+import {AuthRoute,ProtectedRoute} from './utils/AuthRoute';
 import signup from './pages/signup';
+import Loader from './components/Loader';
+import {connect} from 'react-redux';
+import store from './redux/store'
+import {logoutUser,setLogin} from './redux/actions/userActions'
 
-let authenticated;
 const token=localStorage.fbIdToken;
-if(token){
-  const decodedToken=jwtDecode(token);
-  if(decodedToken.exp * 1000 < Date.now()){
-    window.location.href('/login');
-    authenticated=false;
+  if(token){
+    const decodedToken=jwtDecode(token);
+    if(decodedToken.exp * 1000 < Date.now()){
+      store.dispatch(logoutUser());
+      window.location.href = '/login';
+    }
+    else{
+      store.dispatch(setLogin());
+    }
   }
-  else{
-    authenticated=true;
-  }
-}
 
-function App() {
+function App(props) {
+  const {UI:{loading}}=props;
   return (
-    <Provider store={store}>
       <div className="App">
-      <Router>
+      {loading && <Loader/>}
         <Navbar/>
         <div className="container">
         <Switch>
-          <Route exact path='/' component={home}/>
-          <AuthRoute exact path='/login' component={login} authenticated={authenticated}/>
+          <ProtectedRoute exact path='/' component={home} authenticated={props.user.authenticated}/>
+          <AuthRoute exact path='/login' component={login} authenticated={props.user.authenticated}/>
           <Route exact path='/dashboard' component={dashboard}/>
-          <AuthRoute exact path='/signup' component={signup} authenticated={authenticated}/>
+          <AuthRoute exact path='/signup' component={signup} authenticated={props.user.authenticated}/>
           <Route  path='*' component={notFound}/>
         </Switch>
         </div>
-      </Router>
     </div>
-    </Provider>
   );
 }
-
-export default App;
+const mapStateToProps=state=>({
+  UI:state.UI,
+  user:state.user
+})
+export default connect(mapStateToProps)(App);

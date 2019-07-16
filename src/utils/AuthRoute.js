@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route,Redirect} from 'react-router-dom'
-const AuthRoute=({component:Component,authenticated,...rest})=>{
+export const AuthRoute=({component:Component,authenticated,...rest})=>{
     return (
         <Route
             {...rest}
@@ -9,4 +9,12 @@ const AuthRoute=({component:Component,authenticated,...rest})=>{
     )
 }
 
-export default AuthRoute
+
+export const ProtectedRoute=({component:Component,authenticated,...rest})=>{
+    return (
+        <Route
+            {...rest}
+            render={(props)=> !authenticated === true? <Redirect to='/login'/>:<Component {...props} />}
+        />
+    )
+}

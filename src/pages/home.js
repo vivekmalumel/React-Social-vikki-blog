@@ -1,51 +1,26 @@
 import React, { Component } from 'react'
-import axios from 'axios';
 import './home.css';
-export default class home extends Component {
-    state={
-        posts:[],
-        activePage:0,
-        totalCount:0
-    }
+import {getAllPosts,changeActivePage} from '../redux/actions/postActions'
+import {connect} from 'react-redux'
+class home extends Component {
  
     componentDidMount(){
-        let start=this.state.activePage*10;
-        console.log(start);
-        axios.get(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=10`)
-        .then((res)=>{
-            console.log(res.data);
-                this.setState({
-                    posts:res.data,
-                    totalCount:res.headers["x-total-count"]
-                })
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+        let start=this.props.activePage*10;
+        // console.log(start);
+        this.props.getAllPosts(start);
     }
 
     componentDidUpdate(prevProps, prevState){
-        if(prevState.activePage !== this.state.activePage){
-        let start=this.state.activePage*10;
-        console.log(start);
-        axios.get(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=10`)
-        .then((res)=>{
-            console.log(res.data);
-                this.setState({
-                    posts:res.data,
-                    totalCount:res.headers["x-total-count"]
-                })
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-    }
+        if(prevProps.activePage !== this.props.activePage){
+        let start=this.props.activePage*10;
+            this.props.getAllPosts(start);
+        }
     }
 
 
 
     renderPosts=()=>{
-        return this.state.posts.map(post=>{
+        return this.props.posts.map(post=>{
             return(
                 <div className="card mb-3" key={post.id}>
                     <div className="card-header"><h4 className="card-title">{post.title}</h4></div>
@@ -57,19 +32,16 @@ export default class home extends Component {
         })
     }
     changePage=(index)=>{
-        console.log(index);
-        this.setState({
-            activePage:index
-        })
+        this.props.changeActivePage(index);
     }
 
 
     renderPagination=()=>{
         let links=[];
-        for(let i=0;i<this.state.totalCount/10;i++){
+        for(let i=0;i<this.props.totalCount/10;i++){
             links.push(<button key={i} style={{margin:"0 5px"}}
                 onClick={()=>this.changePage(i)}
-                className={`${this.state.activePage===i?'active':''}`}
+                className={`${this.props.activePage===i?'active':''}`}
             >
             {i+1}
         </button>);
@@ -89,3 +61,18 @@ export default class home extends Component {
         )
     }
 }
+
+const mapStateToProps=state=>({
+    posts:state.post.posts,
+    activePage:state.post.activePage,
+    totalCount:state.post.totalCount,
+    UI:state.UI
+})
+
+const MapDispatchToProps=dispatch=>({
+    getAllPosts:(start)=>dispatch(getAllPosts(start)),
+    changeActivePage:(index)=>dispatch(changeActivePage(index))
+    
+})
+
+export default connect(mapStateToProps,MapDispatchToProps)(home);
