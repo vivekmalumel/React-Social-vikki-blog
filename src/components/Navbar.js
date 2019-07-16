@@ -31,7 +31,7 @@ export default class Navbar extends Component {
                   <NavLink className="nav-link" to="/login">Login</NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/signup">Pricing</NavLink>
+                  <NavLink className="nav-link" to="/signup">Signup</NavLink>
                 </li>
               </ul>
               <form className="form-inline my-2 my-lg-0">

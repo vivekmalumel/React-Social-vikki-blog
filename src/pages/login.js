@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import LoginImg from '../images/icons8-user-96.png'
+import {connect} from 'react-redux';
+import  {loginUser} from '../redux/actions/userActions'
+import {clearErrors} from '../redux/actions/uiActions'
+import { setError } from '../redux/actions/uiActions';
+
 const styles={
     loginform:{
         background:"var(--primary)",
@@ -9,52 +13,34 @@ const styles={
         borderRadius:"30px",
     }
 }
-export default class login extends Component {
+class login extends Component {
     state={
         email:'',
-        password:'',
-        loading:false,
-        errors:{}
+        password:''
     }
     handleChange=(event)=>{
         this.setState({
             [event.target.name]:event.target.value
         })
-        this.setState({
-            errors:{
-                ...this.state.errors,
-                [event.target.name]:''
-            }
-        })
+        const newErr={...this.props.UI.errors,[event.target.name]:''};
+        this.props.setError(newErr);
     }
     handleSubmit=(event)=>{
         event.preventDefault();
-        this.setState({
-            loading:true
-        })
         const userData={
             email:this.state.email,
             password:this.state.password
         }
-        axios.post('/login',userData)
-        .then(response=>{
-            console.log(response.data);
-            this.setState({
-                loading:false
-            })
-            localStorage.setItem('fbIdToken',`Bearer ${response.data.token}`)
-            this.props.history.push('/');
-        })
-        .catch(err=>{
-            console.log(err.response.data);
-            this.setState({
-                errors:err.response.data,
-                loading:false
-            })
-        })
+        this.props.loginUser(userData,this.props.history);
     }
+
+    componentWillUnmount=()=>{
+        this.props.clearErrors();
+    }
+
     render() {
-        const {errors}=this.state;
+        const {loading,errors}=this.props.UI;
+        //console.log('render');
         return (
             <div className="mt-2">
                 <h2 className="text-center text-primary font-weight-bold">Login Here</h2>
@@ -85,7 +71,7 @@ export default class login extends Component {
                         {errors.error&&<div className="mb-1 text-danger text-sm text-center">{errors.error}</div>}
                         <div className="form-group text-center">
                         <button type="submit" class="btn btn-light font-weight-bold"
-                            disabled={this.state.loading}
+                            disabled={loading}
                         >
                             Login
                         </button>
@@ -97,3 +83,16 @@ export default class login extends Component {
         )
     }
 }
+
+const mapStateToProps=(state)=>({
+    user:state.user,
+    UI:state.UI
+});
+
+const mapActionsToProps=(dispatch)=>({
+    loginUser:(userData,history)=>dispatch(loginUser(userData,history)),
+    clearErrors:()=>dispatch(clearErrors()),
+    setError:(errors)=>dispatch(setError(errors))
+})
+
+export default  connect(mapStateToProps,mapActionsToProps)(login);

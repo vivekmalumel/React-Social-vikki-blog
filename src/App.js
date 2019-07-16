@@ -8,6 +8,9 @@ import notFound from './pages/notFound';
 import Navbar from './components/Navbar';
 import jwtDecode from 'jwt-decode'
 import AuthRoute from './utils/AuthRoute';
+import {Provider} from 'react-redux';
+import store from './redux/store'
+import signup from './pages/signup';
 
 let authenticated;
 const token=localStorage.fbIdToken;
@@ -24,7 +27,7 @@ if(token){
 
 function App() {
   return (
-    <React.Fragment>
+    <Provider store={store}>
       <div className="App">
       <Router>
         <Navbar/>
@@ -33,12 +36,13 @@ function App() {
           <Route exact path='/' component={home}/>
           <AuthRoute exact path='/login' component={login} authenticated={authenticated}/>
           <Route exact path='/dashboard' component={dashboard}/>
+          <AuthRoute exact path='/signup' component={signup} authenticated={authenticated}/>
           <Route  path='*' component={notFound}/>
         </Switch>
         </div>
       </Router>
     </div>
-    </React.Fragment>
+    </Provider>
   );
 }
 
