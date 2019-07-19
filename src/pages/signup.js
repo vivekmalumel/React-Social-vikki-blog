@@ -19,7 +19,7 @@ const styles={
             email:'',
             password:'',
             confirmPassword:'',
-            handle:''
+            username:''
         }
         handleChange=(event)=>{
             this.setState({
@@ -34,7 +34,7 @@ const styles={
                 email:this.state.email,
                 password:this.state.password,
                 confirmPassword:this.state.confirmPassword,
-                handle:this.state.handle
+                username:this.state.username
             }
             if(userData.password === userData.confirmPassword)
                 this.props.signupUser(userData,this.props.history);
@@ -88,14 +88,14 @@ const styles={
                         {errors.confirmPassword&&<span className="text-danger text-sm">{errors.confirmPassword}</span>}
                     </div>
                     <div className="form-group">
-                        <label className="col-form-label" htmlFor="handle"><b>Handle</b></label>
-                        <input className={`form-control ${errors.handle?'is-invalid':''}`}
-                            type="text" name="handle" 
-                            placeholder="Enter Handle"
+                        <label className="col-form-label" htmlFor="username"><b>Username</b></label>
+                        <input className={`form-control ${errors.username?'is-invalid':''}`}
+                            type="text" name="username" 
+                            placeholder="Enter Username"
                             onChange={this.handleChange}
-                            value={this.state.handle}
+                            value={this.state.username}
                         />
-                        {errors.handle&&<span className="text-danger text-sm">{errors.handle}</span>}
+                        {errors.username&&<span className="text-danger text-sm">{errors.username}</span>}
                     </div>
 
                     {errors.error&&<div className="mb-1 text-danger text-sm text-center">{errors.error}</div>}
