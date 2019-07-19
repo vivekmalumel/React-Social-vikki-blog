@@ -34,6 +34,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "https://us-central1-vikkipedia-91.cloudfunctions.net/api"
+  }
+  // "proxy": "https://us-central1-vikkipedia-91.cloudfunctions.net/api"
 }
