@@ -10,7 +10,7 @@ export const loginUser=(userData,history)=>(dispatch)=>{
             localStorage.setItem('fbIdToken',`Bearer ${response.data.token}`);
             dispatch({type:CLEAR_ERRORS});
             dispatch({type:SET_AUTHENTICATED})
-            history.push('/');
+            history.push('/dashboard');
         })
         .catch(err=>{
             //console.log(err.response.data);
@@ -26,7 +26,7 @@ export const signupUser=(userData,history)=>(dispatch)=>{
             localStorage.setItem('fbIdToken',`Bearer ${response.data.token}`);
             dispatch({type:CLEAR_ERRORS})
             dispatch({type:SET_AUTHENTICATED})
-            history.push('/');
+            history.push('/dashboard');
         })
         .catch(err=>{
             //console.log(err.response.data);

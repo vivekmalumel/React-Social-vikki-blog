@@ -34,9 +34,9 @@ function App(props) {
         <Navbar/>
         <div className="container">
         <Switch>
-          <ProtectedRoute exact path='/' component={home} authenticated={props.user.authenticated}/>
+          <Route exact path='/' component={home} authenticated={props.user.authenticated}/>
           <AuthRoute exact path='/login' component={login} authenticated={props.user.authenticated}/>
-          <Route exact path='/dashboard' component={dashboard}/>
+          <ProtectedRoute exact path='/dashboard' component={dashboard}/>
           <AuthRoute exact path='/signup' component={signup} authenticated={props.user.authenticated}/>
           <Route  path='*' component={notFound}/>
         </Switch>
