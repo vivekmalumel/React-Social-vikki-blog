@@ -4,7 +4,7 @@ import axios from 'axios';
 export const loginUser=(userData,history)=>(dispatch)=>{
     //console.log('action caught');
     dispatch({type:LOADING_UI});
-    axios.post('https://us-central1-social-api-3bbea.cloudfunctions.net/api/login',userData)
+    axios.post('https://us-central1-vikkipedia-91.cloudfunctions.net/api/login',userData)
         .then(response=>{
             
             localStorage.setItem('fbIdToken',`Bearer ${response.data.token}`);
@@ -20,7 +20,7 @@ export const loginUser=(userData,history)=>(dispatch)=>{
 
 export const signupUser=(userData,history)=>(dispatch)=>{
     dispatch({type:LOADING_UI});
-    axios.post('https://us-central1-social-api-3bbea.cloudfunctions.net/api/signup',userData)
+    axios.post('https://us-central1-vikkipedia-91.cloudfunctions.net/api/signup',userData)
         .then(response=>{
             //console.log(response.data);
             localStorage.setItem('fbIdToken',`Bearer ${response.data.token}`);
