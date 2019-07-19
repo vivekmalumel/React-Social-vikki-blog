@@ -30,7 +30,7 @@ function App(props) {
   const {UI:{loading}}=props;
   return (
       <div className="App">
-      {loading && <Loader/>}
+        {loading && <Loader/>}
         <Navbar/>
         <div className="container">
         <Switch>
